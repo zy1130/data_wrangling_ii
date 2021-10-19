@@ -1,0 +1,72 @@
+---
+title: "reading_data_from_the_web"
+author: "zy"
+date: "10/19/2021"
+output: github_document
+---
+
+
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(httr)
+```
+
+
+```{r cars}
+url = "http://samhda.s3-us-gov-west-1.amazonaws.com/s3fs-public/field-uploads/2k15StateFiles/NSDUHsaeShortTermCHG2015.htm"
+```
+
+
+```{r}
+drug_use_html=
+  read_html(url)
+drug_use_html
+```
+
+```{r}
+drug_use_df=
+  drug_use_html%>%
+  html_table()%>%
+  first()%>%
+  slice(-1)
+drug_use_df
+```
+
+```{r}
+sw_html = 
+  read_html("https://www.imdb.com/list/ls070150896/")
+```
+
+```{r}
+sw_titles=
+  sw_html%>%
+  html_elements(".lister-item-header a")%>%
+  html_text()
+
+sw_revenue=
+  sw_html%>%
+  html_elements(".text-small:nth-child(7) span:nth-child(5)")%>%
+  html_text()
+
+
+
+```
+
+```{r}
+water_df=
+  GET("https://data.cityofnewyork.us/resource/ia2d-e54m.json")%>%
+  content("text")%>%
+  jsonlite::fromJSON()%>%
+  as_tibble()
+water_df
+```
+
+```{r}
+poke = 
+  GET("http://pokeapi.co/api/v2/pokemon/1") %>%
+  content()
+
+poke$name
+```
