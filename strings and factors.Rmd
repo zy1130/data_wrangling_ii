@@ -104,6 +104,34 @@ marj_df%>%
 ```
 
 ```{r}
-
+data("rest_inspec")
 ```
+
+```{r}
+rest_inspec%>%
+  janitor::tabyl(boro,grade)
+```
+
+```{r}
+rest_inspec=
+  rest_inspec%>%
+  filter(
+    str_detect(grade,"[ABC]"),
+    !(boro=="Missing"))%>%
+  mutate(boro=str_to_title(boro))
+```
+
+```{r}
+rest_inspec%>%
+  filter(str_detect(dba,"[Pp][Ii][Zz][Zz][Aa]"))%>%
+  mutate(
+    boro=fct_infreq(boro),
+    boro=fct_recode(boro,"The City"="Manhattan")
+  )%>%
+  ggplot(aes(x=boro,fill=grade))+
+  geom_bar()
+  
+```
+
+
 
